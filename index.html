@@ -252,11 +252,19 @@
 
       const API_KEY = "AIzaSyDw0iXjkKAphevR4slo9-oc4hNKx8CrxcQ";
 
-      const firebaseConfig = JSON.parse(
-        typeof __firebase_config !== "undefined" ? __firebase_config : "{}"
-      );
-      const appId =
-        typeof __app_id !== "undefined" ? __app_id : "default-app-id";
+      // NOTE: You must replace the placeholder values below with your actual Firebase project's configuration object.
+      // You can find this in your Firebase project console under Project settings > General.
+      const firebaseConfig = {
+        apiKey: "AIzaSyCulpwk_PCXCc0dvcCahJB3QWjYJ5hPm8c",
+        authDomain: "policy-watchdog-65545.firebaseapp.com",
+        projectId: "policy-watchdog-65545",
+        storageBucket: "policy-watchdog-65545.firebasestorage.app",
+        messagingSenderId: "819200556034",
+        appId: "1:819200556034:web:30368d35509a80c085bb1b",
+        measurementId: "G-JP2HCLNZE5",
+      };
+
+      const appId = firebaseConfig.projectId || "default-app-id";
 
       const app = initializeApp(firebaseConfig);
       const auth = getAuth(app);
@@ -606,8 +614,8 @@ Your recommendations:`;
       };
 
       // Firebase Auth and Firestore Logic
-      const setupUser = async () => {
-        const userId = auth.currentUser?.uid || crypto.randomUUID();
+      const setupUser = async (user) => {
+        const userId = user?.uid || crypto.randomUUID();
         const userRef = doc(
           db,
           `artifacts/${appId}/users/${userId}/profile/data`
@@ -617,7 +625,6 @@ Your recommendations:`;
         if (!docSnap.exists()) {
           // New user, set default premium status to false
           await setDoc(userRef, { isPremium: false });
-          isPremiumUser = false;
         } else {
           isPremiumUser = docSnap.data().isPremium || false;
         }
@@ -627,33 +634,35 @@ Your recommendations:`;
           subscriptionStatusText.textContent = "You are a premium subscriber.";
           shopifyToggle.disabled = false;
           shopifyToggle.classList.remove("cursor-not-allowed");
+          shopifyColumn.classList.remove("hidden");
         } else {
           subscriptionStatusText.textContent =
             "You are a free user. Upgrade to track more platforms.";
           shopifyToggle.disabled = true;
           shopifyToggle.checked = false;
           shopifyToggle.classList.add("cursor-not-allowed");
-        }
-
-        const platforms = getTrackedPlatforms();
-        if (platforms.includes("Shopify")) {
-          shopifyColumn.classList.remove("hidden");
-        } else {
           shopifyColumn.classList.add("hidden");
         }
 
         console.log(`User ID: ${userId}, Is Premium: ${isPremiumUser}`);
       };
 
-      onAuthStateChanged(auth, async (user) => {
-        if (user) {
-          await setupUser();
-        } else {
-          await signInAnonymously(auth).catch((error) =>
-            console.error("Anonymous sign-in failed:", error)
+      const initFirebase = async () => {
+        try {
+          await signInAnonymously(auth);
+          const user = auth.currentUser;
+          if (user) {
+            await setupUser(user);
+          }
+        } catch (error) {
+          console.error("Firebase initialization or sign-in failed:", error);
+          showMessage(
+            "Error",
+            `Authentication failed. Check your Firebase Authentication settings. Error: ${error.message}`,
+            true
           );
         }
-      });
+      };
 
       // Event Listeners
       refreshButton.addEventListener("click", fetchAllUpdates);
@@ -666,7 +675,8 @@ Your recommendations:`;
         }
       });
 
-      // Initial message on load
+      // Initial setup
+      initFirebase();
       showMessage("Ready", 'Click "Check for Updates" to begin.', false);
     </script>
   </body>
