@@ -1,0 +1,32 @@
+I. Data Acquisition: The Safest Path Forward
+The core challenge is accessing Etsy's policy changes without violating their terms of service or engaging in unreliable scraping. Based on a review of public information, the safest approach is to use official, public sources.
+
+Etsy Community Announcements: Etsy frequently posts major policy updates and news in its official Community forums, specifically under the "Announcements" section. These posts are publicly accessible and written for the seller community. This is a reliable and legitimate source for tracking changes.
+
+Investor Relations RSS Feeds: While not for policy changes, Etsy's Investor Relations page offers various RSS feeds for press releases and SEC filings. These feeds can be monitored for broader company announcements that may indirectly affect sellers, such as changes in business strategy or fees.
+
+Third-Party Blogs and Services: Many reputable third-party services and blogs (like eRank and Marmalead) publish summaries and analysis of Etsy policy changes. These can be a great source for validated information and additional context.
+
+Crucial Note: We will not build a web scraper to parse Etsy's live legal pages. This is the safest and most reliable way to avoid potential legal issues and service interruptions, and it aligns with Google's policies regarding user data and web content in Chrome extensions.
+
+II. The Google Chrome Extension: Design & Policy Adherence
+The Chrome extension will be designed to be user-friendly, privacy-focused, and fully compliant with Google's policies.
+
+Single-Purpose & Privacy-Focused: The extension's sole purpose will be to notify the user of new Etsy policy announcements and provide recommendations. It will not collect any user browsing data, as this is a strict requirement of the Chrome Web Store.
+
+Permissions: The extension will only require a minimal set of permissions, such as activeTab or storage, to function correctly. This ensures user trust and adherence to Google's "least privilege" principle.
+
+User Interface: The extension will be a simple popup (popup.html) that the user can click. It will display recent policy updates and a button to get recommendations.
+
+Data Storage: The user's preferences, such as the last time they checked for updates, will be stored locally using chrome.storage.local.
+
+III. The Recommendation Engine: AI-Powered Insights
+This is where we add value. Instead of just showing the policy text, we will use a large language model to analyze the changes and provide actionable advice.
+
+Extract Policy Text: The extension will fetch the content of the policy announcement from the legitimate sources identified in Part I.
+
+Call the Gemini API: The key part of the extension will be a call to the Gemini API (gemini-2.5-flash-preview-05-20). The policy text will be sent to the model with a clear prompt, asking it to summarize the changes and provide recommendations for an Etsy seller.
+
+Display Recommendations: The model's response will be displayed in the extension's popup, giving the user a clear, concise, and actionable summary of what they need to do.
+
+This combination of a legitimate data source and an intelligent recommendation engine creates a powerful and safe tool that provides genuine value to the user. The included file demonstrates a working prototype of this system.

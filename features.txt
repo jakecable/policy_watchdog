@@ -1,0 +1,39 @@
+Features (with build order)
+
+Cross-site Policy Monitor (MVP)
+
+Track official policy/news pages per platform (see sources below).
+
+Diff & summarize changes; tag severity & category (fees / prohibited items / shipping / data / ads).
+
+AI: small LLM to summarize diffs into seller-friendly bullets; rule-based tagging to start.
+
+Checklists & Acknowledgments
+
+Per change, attach an actionable checklist.
+
+Acknowledge → moves to audit trail (CSV/PDF export for agencies).
+
+Impact Estimator (lightweight)
+
+If shop not connected: user selects affected listings manually → conservative $-risk estimate (price × sales velocity guess × “delist probability”).
+
+If shop connected later: pull actual listings & sales to estimate impact automatically.
+
+Email/Slack Notifications
+
+Templates by severity; batched digests.
+
+Multi-platform coverage
+
+Start: Etsy.
+
+Add: Amazon, eBay, Shopify.
+
+Nice-to-have after v1:
+
+Keyword watcher for policy pages (alert only when sections with “fees,” “prohibited,” “VAT,” “ads” change).
+
+Role-based access for teams or agencies.
+
+API/Webhook for partners.

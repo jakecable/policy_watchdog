@@ -1,0 +1,80 @@
+Product mockup — “Policy Watchdog” (extension + web hub)
+A) Browser extension (Chrome/Edge/Firefox)
+
+Purpose: Instant policy-change alerts while sellers are “in their shop,” without making them visit a separate app.
+
+Extension popup (collapsed, 1-click)
+
+Top strip: ⚠️ New since you last checked: 1 • [View]
+
+Tiles (per platform):
+
+Etsy — “Creativity Standards tightened for 3D prints (Jun 10, 2025)” → Impact: 2 listings at risk → [Fix steps] 
+Etsy
+TechRadar
+Tom's Hardware
+
+Amazon — “Program policies change: data processing addendum (upcoming)” → [See details] 
+Amazon Seller Central
+
+eBay — “April 2025 Seller News: import rules for MX shipments” → [Checklist] 
+eBay
+Value Added Resource
+
+Shopify — “Terms & DPA update effective Jul 25, 2025” → [Review] 
+Shopify
++1
+
+Buttons: [Acknowledge] [Email me summary] [Open Web Hub]
+
+“Fix steps” slide-over
+
+Plain-English summary (3–5 bullets).
+
+Auto-checklist (mark as done): e.g., “Confirm original design source for 3D prints,” “Add originality statement to listings,” “Hide affected SKUs.”
+
+Impact estimator (mini form): select listings → see estimated compliance risk and profit risk (e.g., “2 listings may be delisted; est. −$95/mo if unchanged”).
+
+Save as task (syncs to web hub).
+
+Why sellers will use it: They get the what changed → what it means → what to do now in one click, right where they work.
+
+B) Web hub (dashboard)
+
+Header KPIs
+
+Open policy actions: 3
+
+Shops covered: 2
+
+Estimated risk avoided this month: $180
+
+Time saved: 2.5 hrs (est.)
+
+Modules
+
+Policy Timeline (by platform)
+Filter: Etsy / Amazon / eBay / Shopify / All.
+Each row: date • title • severity (High/Med/Low) • “Who’s affected?” • [Read] [Checklist].
+
+Impact by Listing (optional if shop connected)
+Table: Listing • Platform • Risk (High/Med/Low) • Reason • Est. $ impact • [Mark Fixed].
+
+Recommendations
+Ranked list: “Add originality statement to 3D-printed listings” → +Compliance, +Trust.
+“Update MX shipping disclosures on eBay” → Avoid holds/returns.
+
+Acknowledgments & Audit Trail
+Every alert you acknowledged + timestamp + user.
+
+Email Planner
+Choose cadence: instant / daily / weekly / monthly + channels (email, Slack, webhook).
+
+C) Email digests (choose cadence)
+
+Instant alert (short): “Etsy updated Creativity Standards. 2 of your listings may be affected. 3-step checklist inside.” 
+Etsy
+
+Weekly digest: “3 policy changes this week across Etsy & Amazon. 2 high-priority tasks outstanding. Est. −$95/mo if ignored.”
+
+Monthly report (PDF): Changes you acknowledged, tasks completed, remaining risk, projected impact avoided.

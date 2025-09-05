@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Etsy Policy Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        width: 400px;
+        background-color: #f7fafc;
+        overflow-x: hidden;
+      }
+      .container {
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+      .animate-pulse-slow {
+        animation: pulse-slow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+      @keyframes pulse-slow {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+      }
+      .policy-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+      @media (min-width: 768px) {
+        .policy-container {
+          flex-direction: row;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="text-center">
+        <h1 class="text-2xl font-bold text-gray-900">Etsy Policy Tracker</h1>
+        <p class="text-sm text-gray-600 mt-1">
+          Stay up-to-date with policy changes.
+        </p>
+      </div>
+
+      <div
+        id="status-message-container"
+        class="transition-opacity duration-300"
+      >
+        <div
+          id="status-message"
+          class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 rounded-lg hidden"
+          role="alert"
+        >
+          <div class="flex items-center">
+            <svg
+              id="loading-spinner"
+              class="animate-spin h-5 w-5 mr-3 text-blue-500 hidden"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              ></circle>
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
+            </svg>
+            <p id="status-text" class="font-bold">Loading...</p>
+          </div>
+          <p id="status-subtext" class="text-sm">
+            Fetching the latest policy updates...
+          </p>
+        </div>
+      </div>
+
+      <!-- Policy and Recommendations container for two columns -->
+      <div class="policy-container md:flex-row flex-col">
+        <!-- Etsy Column -->
+        <div
+          class="w-full md:w-1/2 bg-white p-6 rounded-xl shadow-lg border border-gray-200"
+        >
+          <h2 class="text-xl font-semibold text-gray-800 text-center">Etsy</h2>
+          <div id="etsy-policy-content" class="mt-4">
+            <h3
+              id="etsy-policy-title"
+              class="text-xl font-semibold text-gray-800 animate-pulse-slow"
+            >
+              No recent updates found.
+            </h3>
+            <p id="etsy-policy-date" class="text-xs text-gray-500 mt-1">
+              Last checked: --
+            </p>
+            <div id="etsy-policy-text-wrapper" class="mt-4">
+              <p
+                id="etsy-policy-text"
+                class="text-sm text-gray-700 animate-pulse-slow"
+              ></p>
+              <div
+                id="etsy-source-link-container"
+                class="text-xs text-gray-500 mt-2"
+              ></div>
+            </div>
+
+            <div id="etsy-recommendations" class="mt-4 hidden">
+              <h4 class="font-bold text-gray-800">Recommendations:</h4>
+              <div
+                id="etsy-recommendation-text"
+                class="text-sm text-gray-700 mt-2"
+              ></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Shopify Column -->
+        <div
+          class="w-full md:w-1/2 bg-white p-6 rounded-xl shadow-lg border border-gray-200 hidden"
+        >
+          <h2 class="text-xl font-semibold text-gray-800 text-center">
+            Shopify
+          </h2>
+          <div id="shopify-policy-content" class="mt-4">
+            <h3
+              id="shopify-policy-title"
+              class="text-xl font-semibold text-gray-800 animate-pulse-slow"
+            >
+              No recent updates found.
+            </h3>
+            <p id="shopify-policy-date" class="text-xs text-gray-500 mt-1">
+              Last checked: --
+            </p>
+            <div id="shopify-policy-text-wrapper" class="mt-4">
+              <p
+                id="shopify-policy-text"
+                class="text-sm text-gray-700 animate-pulse-slow"
+              ></p>
+              <div
+                id="shopify-source-link-container"
+                class="text-xs text-gray-500 mt-2"
+              ></div>
+            </div>
+
+            <div id="shopify-recommendations" class="mt-4 hidden">
+              <h4 class="font-bold text-gray-800">Recommendations:</h4>
+              <div
+                id="shopify-recommendation-text"
+                class="text-sm text-gray-700 mt-2"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- New: Subscription Dashboard -->
+      <div
+        id="subscription-dashboard"
+        class="bg-white p-6 rounded-xl shadow-lg border border-gray-200"
+      >
+        <h2 class="text-xl font-semibold text-gray-800">
+          Subscription Dashboard
+        </h2>
+        <p id="subscription-status" class="text-sm text-gray-600 mt-1">
+          Loading status...
+        </p>
+
+        <div id="platform-list" class="mt-4 flex flex-col gap-2">
+          <div
+            class="flex items-center justify-between p-3 rounded-lg bg-gray-50"
+          >
+            <span class="font-medium text-gray-700">Etsy</span>
+            <input
+              type="checkbox"
+              id="etsy-toggle"
+              data-platform="Etsy"
+              checked
+              class="h-5 w-5 rounded-md text-indigo-600 focus:ring-indigo-500 cursor-not-allowed"
+              disabled
+            />
+          </div>
+          <div
+            class="flex items-center justify-between p-3 rounded-lg bg-gray-50"
+          >
+            <span class="font-medium text-gray-700">Shopify</span>
+            <input
+              type="checkbox"
+              id="shopify-toggle"
+              data-platform="Shopify"
+              class="h-5 w-5 rounded-md text-indigo-600 focus:ring-indigo-500"
+              disabled
+            />
+          </div>
+          <div
+            class="flex items-center justify-between p-3 rounded-lg bg-gray-50"
+          >
+            <span class="font-medium text-gray-700">Amazon Handmade</span>
+            <span class="text-xs text-gray-500">Coming Soon</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-4">
+        <button
+          id="refresh-button"
+          class="w-full bg-indigo-600 text-white font-semibold py-3 px-4 rounded-lg shadow-md hover:bg-indigo-700 transition duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+        >
+          Check for Updates
+        </button>
+        <button
+          id="recommend-button"
+          class="w-full bg-green-600 text-white font-semibold py-3 px-4 rounded-lg shadow-md hover:bg-green-700 transition duration-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 hidden"
+        >
+          Get Recommendations
+        </button>
+      </div>
+    </div>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+      import {
+        getAuth,
+        signInAnonymously,
+        onAuthStateChanged,
+        signInWithCustomToken,
+      } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+      import {
+        getFirestore,
+        doc,
+        setDoc,
+        getDoc,
+        onSnapshot,
+      } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+      const API_KEY = "AIzaSyDw0iXjkKAphevR4slo9-oc4hNKx8CrxcQ";
+
+      const firebaseConfig = JSON.parse(
+        typeof __firebase_config !== "undefined" ? __firebase_config : "{}"
+      );
+      const appId =
+        typeof __app_id !== "undefined" ? __app_id : "default-app-id";
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+
+      const statusMessageContainer = document.getElementById(
+        "status-message-container"
+      );
+      const statusMessage = document.getElementById("status-message");
+      const statusText = document.getElementById("status-text");
+      const statusSubtext = document.getElementById("status-subtext");
+      const loadingSpinner = document.getElementById("loading-spinner");
+      const refreshButton = document.getElementById("refresh-button");
+      const recommendButton = document.getElementById("recommend-button");
+      const subscriptionStatusText = document.getElementById(
+        "subscription-status"
+      );
+      const shopifyToggle = document.getElementById("shopify-toggle");
+      const shopifyColumn = document.getElementById(
+        "shopify-policy-content"
+      ).parentNode;
+
+      const policyElements = {
+        Etsy: {
+          title: document.getElementById("etsy-policy-title"),
+          date: document.getElementById("etsy-policy-date"),
+          text: document.getElementById("etsy-policy-text"),
+          source: document.getElementById("etsy-source-link-container"),
+          recommendations: document.getElementById("etsy-recommendations"),
+          recommendationText: document.getElementById(
+            "etsy-recommendation-text"
+          ),
+        },
+        Shopify: {
+          title: document.getElementById("shopify-policy-title"),
+          date: document.getElementById("shopify-policy-date"),
+          text: document.getElementById("shopify-policy-text"),
+          source: document.getElementById("shopify-source-link-container"),
+          recommendations: document.getElementById("shopify-recommendations"),
+          recommendationText: document.getElementById(
+            "shopify-recommendation-text"
+          ),
+        },
+      };
+
+      let policyData = {};
+      let isPremiumUser = false; // Manually change this to true or false for testing
+
+      const showMessage = (
+        text,
+        subtext = "",
+        isError = false,
+        isLoading = false
+      ) => {
+        statusMessage.classList.remove(
+          "hidden",
+          "bg-red-100",
+          "border-red-500",
+          "text-red-700",
+          "bg-blue-100",
+          "border-blue-500",
+          "text-blue-700"
+        );
+        loadingSpinner.classList.add("hidden");
+        statusText.textContent = text;
+        statusSubtext.textContent = subtext;
+
+        if (isError) {
+          statusMessage.classList.add(
+            "bg-red-100",
+            "border-red-500",
+            "text-red-700"
+          );
+        } else {
+          statusMessage.classList.add(
+            "bg-blue-100",
+            "border-blue-500",
+            "text-blue-700"
+          );
+        }
+
+        if (isLoading) {
+          loadingSpinner.classList.remove("hidden");
+        }
+      };
+
+      const hideMessage = () => {
+        statusMessage.classList.add("hidden");
+      };
+
+      const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+
+      const getTrackedPlatforms = () => {
+        const platforms = ["Etsy"];
+        if (isPremiumUser && shopifyToggle.checked) {
+          platforms.push("Shopify");
+        }
+        return platforms;
+      };
+
+      const fetchUpdatesForPlatform = async (platform) => {
+        const userQuery = `latest policy changes for ${platform} including transaction fee or ad fee changes. Provide a summary of the key changes as a brief paragraph and a bulleted list.`;
+        const searchApiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${API_KEY}`;
+
+        let retryCount = 0;
+        const maxRetries = 3;
+
+        try {
+          if (!API_KEY) {
+            throw new Error(
+              "API key is not set. Please update the API_KEY variable in the code."
+            );
+          }
+
+          let responseContent = null;
+          let source = null;
+
+          while (retryCount < maxRetries) {
+            const payload = {
+              contents: [{ parts: [{ text: userQuery }] }],
+              tools: [{ google_search: {} }],
+            };
+
+            const response = await fetch(searchApiUrl, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            });
+
+            if (response.status === 429) {
+              retryCount++;
+              await delay(Math.pow(2, retryCount) * 1000);
+              continue;
+            }
+
+            if (!response.ok) {
+              throw new Error(
+                `API error for ${platform}: ${response.status} ${response.statusText}.`
+              );
+            }
+
+            const result = await response.json();
+            responseContent =
+              result?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+            if (responseContent) {
+              const groundingMetadata =
+                result?.candidates?.[0]?.groundingMetadata;
+              if (groundingMetadata?.groundingAttributions?.length > 0) {
+                const attribution =
+                  groundingMetadata.groundingAttributions[0].web;
+                if (attribution && attribution.uri) {
+                  source = {
+                    url: attribution.uri,
+                    title: attribution.title || "Source Link",
+                  };
+                }
+              } else {
+                source = {
+                  url: `https://www.${platform.toLowerCase()}.com/`,
+                  title: `${platform} Official Site`,
+                };
+              }
+              break;
+            }
+            retryCount++;
+          }
+
+          if (responseContent) {
+            policyData[platform] = responseContent;
+            policyElements[
+              platform
+            ].title.textContent = `Latest Policy Updates for ${platform}`;
+            policyElements[platform].date.textContent =
+              "Pulled from a recent third-party source";
+            policyElements[platform].text.innerHTML = responseContent.replace(
+              /\n/g,
+              "<br>"
+            );
+
+            if (source && source.url) {
+              policyElements[platform].source.innerHTML = "";
+              const sourceLink = document.createElement("a");
+              sourceLink.href = source.url;
+              sourceLink.textContent = `Source: ${source.title}`;
+              sourceLink.target = "_blank";
+              sourceLink.rel = "noopener noreferrer";
+              sourceLink.className = "underline hover:no-underline";
+              policyElements[platform].source.appendChild(sourceLink);
+            }
+
+            policyElements[platform].title.classList.remove(
+              "animate-pulse-slow"
+            );
+            policyElements[platform].text.classList.remove(
+              "animate-pulse-slow"
+            );
+          } else {
+            policyElements[
+              platform
+            ].title.textContent = `Failed to get updates for ${platform}`;
+            policyElements[platform].text.textContent =
+              "Please try again later.";
+          }
+        } catch (error) {
+          console.error(`Error fetching updates for ${platform}:`, error);
+          policyElements[platform].title.textContent = `Error for ${platform}`;
+          policyElements[
+            platform
+          ].text.textContent = `Could not fetch updates. Error: ${error.message}`;
+        }
+      };
+
+      const fetchAllUpdates = async () => {
+        const platforms = getTrackedPlatforms();
+        if (platforms.length === 0) {
+          showMessage(
+            "Ready",
+            "Please select at least one platform to track.",
+            true
+          );
+          return;
+        }
+
+        showMessage(
+          "Loading...",
+          `Checking for updates on ${platforms.join(" and ")}...`,
+          false,
+          true
+        );
+        refreshButton.disabled = true;
+        recommendButton.classList.add("hidden");
+
+        platforms.forEach((p) => {
+          policyElements[p].title.textContent = "Loading...";
+          policyElements[p].date.textContent = "Last checked: --";
+          policyElements[p].text.textContent = "";
+          policyElements[p].source.innerHTML = "";
+          policyElements[p].recommendations.classList.add("hidden");
+          policyElements[p].title.classList.add("animate-pulse-slow");
+          policyElements[p].text.classList.add("animate-pulse-slow");
+        });
+
+        await Promise.all(platforms.map(fetchUpdatesForPlatform));
+
+        hideMessage();
+        recommendButton.classList.remove("hidden");
+        refreshButton.disabled = false;
+      };
+
+      const getRecommendationsForPlatform = async (platform, policyContent) => {
+        policyElements[platform].recommendations.classList.add("hidden");
+        policyElements[platform].recommendationText.textContent = "";
+
+        const userPrompt = `You are a helpful and experienced e-commerce seller. Analyze the following ${platform} policy change or trend and provide actionable recommendations for a seller. Focus on what they should do to comply and how to mitigate any potential negative impact. Provide the recommendations in a concise, bulleted list.
+
+Policy Change:
+${policyContent}
+
+Your recommendations:`;
+
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${API_KEY}`;
+
+        let retryCount = 0;
+        const maxRetries = 3;
+
+        try {
+          if (!API_KEY) {
+            throw new Error(
+              "API key is not set. Please update the API_KEY variable in the code."
+            );
+          }
+          while (retryCount < maxRetries) {
+            const payload = {
+              contents: [{ parts: [{ text: userPrompt }] }],
+            };
+
+            const response = await fetch(apiUrl, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            });
+
+            if (response.status === 429) {
+              retryCount++;
+              await delay(Math.pow(2, retryCount) * 1000);
+              continue;
+            }
+
+            if (!response.ok) {
+              throw new Error(
+                `API error for ${platform} recommendations: ${response.status} ${response.statusText}.`
+              );
+            }
+
+            const result = await response.json();
+            const text = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+            if (text) {
+              policyElements[platform].recommendationText.innerHTML =
+                text.replace(/\n/g, "<br>");
+              policyElements[platform].recommendations.classList.remove(
+                "hidden"
+              );
+              break;
+            } else {
+              throw new Error(
+                `No text content in API response for ${platform}`
+              );
+            }
+          }
+          if (retryCount === maxRetries) {
+            throw new Error(
+              `Failed to get recommendations for ${platform} after multiple retries.`
+            );
+          }
+        } catch (error) {
+          console.error(
+            `Error getting recommendations for ${platform}:`,
+            error
+          );
+          policyElements[
+            platform
+          ].recommendationText.textContent = `Could not generate recommendations at this time. Error: ${error.message}`;
+          policyElements[platform].recommendations.classList.remove("hidden");
+        }
+      };
+
+      const getRecommendations = async () => {
+        const platforms = getTrackedPlatforms();
+        if (platforms.length === 0) return;
+
+        showMessage(
+          "Thinking...",
+          "Generating recommendations...",
+          false,
+          true
+        );
+        recommendButton.disabled = true;
+
+        await Promise.all(
+          platforms.map((p) => getRecommendationsForPlatform(p, policyData[p]))
+        );
+
+        hideMessage();
+        recommendButton.disabled = false;
+      };
+
+      // Firebase Auth and Firestore Logic
+      const setupUser = async () => {
+        const userId = auth.currentUser?.uid || crypto.randomUUID();
+        const userRef = doc(
+          db,
+          `artifacts/${appId}/users/${userId}/profile/data`
+        );
+
+        const docSnap = await getDoc(userRef);
+        if (!docSnap.exists()) {
+          // New user, set default premium status to false
+          await setDoc(userRef, { isPremium: false });
+          isPremiumUser = false;
+        } else {
+          isPremiumUser = docSnap.data().isPremium || false;
+        }
+
+        // Update UI based on user status
+        if (isPremiumUser) {
+          subscriptionStatusText.textContent = "You are a premium subscriber.";
+          shopifyToggle.disabled = false;
+          shopifyToggle.classList.remove("cursor-not-allowed");
+        } else {
+          subscriptionStatusText.textContent =
+            "You are a free user. Upgrade to track more platforms.";
+          shopifyToggle.disabled = true;
+          shopifyToggle.checked = false;
+          shopifyToggle.classList.add("cursor-not-allowed");
+        }
+
+        const platforms = getTrackedPlatforms();
+        if (platforms.includes("Shopify")) {
+          shopifyColumn.classList.remove("hidden");
+        } else {
+          shopifyColumn.classList.add("hidden");
+        }
+
+        console.log(`User ID: ${userId}, Is Premium: ${isPremiumUser}`);
+      };
+
+      onAuthStateChanged(auth, async (user) => {
+        if (user) {
+          await setupUser();
+        } else {
+          await signInAnonymously(auth).catch((error) =>
+            console.error("Anonymous sign-in failed:", error)
+          );
+        }
+      });
+
+      // Event Listeners
+      refreshButton.addEventListener("click", fetchAllUpdates);
+      recommendButton.addEventListener("click", getRecommendations);
+      shopifyToggle.addEventListener("change", () => {
+        if (shopifyToggle.checked) {
+          shopifyColumn.classList.remove("hidden");
+        } else {
+          shopifyColumn.classList.add("hidden");
+        }
+      });
+
+      // Initial message on load
+      showMessage("Ready", 'Click "Check for Updates" to begin.', false);
+    </script>
+  </body>
+</html>
